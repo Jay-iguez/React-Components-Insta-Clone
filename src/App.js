@@ -19,7 +19,7 @@ const App = () => {
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
   const [posts, setPosts] = useState(dummyData)
-
+  const [search, setSearch] = useState("")
   const likePost = postId => {
     /*
       This function serves the purpose of increasing the number of likes by one, of the post with a given id.
@@ -43,12 +43,24 @@ const App = () => {
 
   };
 
+  function filterPosts() {
+      const termNormalilzed = search.trim().toLowerCase()
+
+      if (!termNormalilzed) {
+        return posts
+      } else {
+        return posts.filter(post => {
+          return post.username.toLowerCase().includes(termNormalilzed)
+        })
+      }
+  }
+
   return (
     <div className='App'>
       {/* Add SearchBar and Posts here to render them */
       <div>
-        <SearchBar />
-        <Posts likePost={likePost} posts={posts} />  
+        <SearchBar input={ setSearch } />
+        <Posts likePost={likePost} posts={search === "" ? posts : filterPosts()} />  
       </div>
       
       }
